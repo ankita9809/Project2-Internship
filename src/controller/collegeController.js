@@ -38,7 +38,7 @@ const createCollege = async function (req, res) {
         }
 
         let savedData = await collegeModel.create(data)
-        return res.status(201).send({ status: true, data: savedData })
+        return res.status(201).send({ status: true, data:{name:savedData.name,fullName:savedData.fullName,logoLink:savedData.logoLink,isDeleted:savedData.isDeleted}})
     }
     catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
