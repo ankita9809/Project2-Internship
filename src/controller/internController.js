@@ -19,21 +19,23 @@ const createIntern = async function (req, res) {
     try {
         const internData = req.body
 
-        console.log(internData)
-
         if (Object.keys(internData).length == 0) {
             return res.status(400).send({ status: false, msg: "Please Provide Data" })
         }
 
-        // if (!internData.name) {
-        //     return res.status(400).send({ status: false, msg: "Please Provide Name" })
-        // }
+        if (!isValidObjectId(internData.collegeId)) {
+            return res.status(400).send({ status: false, msg: "collegeId is invalid!" })
+        }
+
+        if (!internData.name || internData.name.trim().length=="") {
+            return res.status(400).send({ status: false, msg: "Please Provide Name" })
+        }
         if (!internData.email) {
             console.log(internData.email)
             return res.status(400).send({ status: false, msg: "Please Provide email" })
         }
-        if (!emailRegex.test(internData.email)) 
-        return res.status(400).send({ status:false,  message: "Please Enter Email in valid Format" })
+        if (!emailRegex.test(internData.email))
+            return res.status(400).send({ status: false, message: "Please Enter Email in valid Format" })
 
         let duplicateEmail = await internModel.findOne({ email: internData.email });
         if (duplicateEmail) {
@@ -58,7 +60,8 @@ const createIntern = async function (req, res) {
         // }
 
         let savedData = await internModel.create(internData)
-        return res.status(201).send({ status: true, data: savedData })
+        console.log(savedData)
+        return res.status(201).send({ status: true, data:{isDeleted:savedData.isDeleted,name:savedData.name,email:savedData.email,mobile:savedData.mobile,collegeId:`"ObjectId"${savedData._id}`} })
     }
     catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
