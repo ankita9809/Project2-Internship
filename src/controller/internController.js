@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
 //const mobileRegex = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
 const mobileRegex = /^[6-9]\d{9}$/
-
+ 
 
 
 //
@@ -42,7 +42,7 @@ const createIntern = async function (req, res) {
         if (!internData.mobile) {
             return res.status(400).send({ status: false, msg: "Please Provide Mobile No" })
         }
-        if (!mobileRegex.test(internData.mobile)) {     //Error 
+        if (!mobileRegex.test(internData.mobile)) {     
             return res.status(400).send({ status: false, msg: "Please Provide valid Mobile No" })
         }
         let duplicateMobile = await internModel.findOne({ mobile: internData.mobile });

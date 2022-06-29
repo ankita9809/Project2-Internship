@@ -8,7 +8,7 @@ const internSchema = new mongoose.Schema ({
     },
     name: {
         type: String, 
-        require: true,
+        require: true, 
         trim: true,
     }, 
     email: {            
