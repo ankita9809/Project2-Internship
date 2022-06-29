@@ -13,7 +13,7 @@ const mobileRegex = /^[6-9]\d{9}$/
 //
 const isValidObjectId = function (objectId) { return mongoose.Types.ObjectId.isValid(objectId) }
 const objectValue = function (value) {
-    if (typeof value === "undefined" || value === null || typeof value === Number) return false
+    if (typeof value === "undefined" || value === null ) return false    //|| typeof value === Number
     if (typeof value === "string" && value.trim().length === 0) return false
     return true
 }
@@ -34,7 +34,7 @@ const createIntern = async function (req, res) {
         if (!internData.name) {
             return res.status(400).send({ status: false, msg: "Please Provide Name" })
         }
-        if (objectValue(internData.name)) {
+        if (!objectValue(internData.name)) {
             return res.status(400).send({ status: false, msg: "Please Provide valid Name" })
         }
         if (!internData.email) {
@@ -71,7 +71,16 @@ const createIntern = async function (req, res) {
         const collegeId = collegeData._id // 
         const dataOfIntern = { name, email, mobile, collegeId } // restructuring of internData
         let savedData = await internModel.create(dataOfIntern)
-        return res.status(201).send({ status: true, data: savedData })
+        return res.status(201).send({
+            status: true,
+            data: {
+                isDeleted: savedData.isDeleted,
+                name: savedData.name,
+                email: savedData.email,
+                mobile: savedData.mobile,
+                collegeId: savedData.collegeId
+            }
+        })
     }
     catch (err) {
         return res.status(500).send({ status: false, msg: err.message })

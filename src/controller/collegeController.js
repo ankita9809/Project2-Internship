@@ -2,7 +2,7 @@ const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
 
 
-//--------------------------- Regex for logo ---------------------------------------------------------------
+//--------------------------- Regex 
 
 const logoRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
 
@@ -68,16 +68,6 @@ const getCollegeDetails = async function (req, res) {
     }
 }
 
-// -------------------------- GET COLLEGE ---------------------------------------------------------------
-
-const getDetails = async function(req, res){
-    try{
-        const allData = await collegeModel.find()
-        res.status(200).send({status: false, data: allData})
-    } catch(err){
-        return res.status(500).send({status:false,msg:err.message})
-    }
-}
 
 
 
