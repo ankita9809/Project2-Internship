@@ -6,7 +6,7 @@ const collegeSchema = new mongoose.Schema ({
         require: true,
         unique: true,
         trim: true,
-    }, 
+    },  
     fullName: {
         type: String,
         require: true,
@@ -15,6 +15,11 @@ const collegeSchema = new mongoose.Schema ({
     logoLink: {
         type: String,
         require: true,
+        validate : {
+            validator: function(logoLink){
+               return /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/.test(logoLink) 
+            }
+        }
     },
     isDeleted: {
         type: Boolean,
@@ -24,3 +29,5 @@ const collegeSchema = new mongoose.Schema ({
 }, {timestamps : true});
 
 module.exports = mongoose.model ('collegeDB', collegeSchema)
+
+

@@ -5,8 +5,8 @@ const internController = require("../controller/internController");
 
 
 //---------------------- CREATE College and Interns ------------------------------------------
-//router.post("/functionup/colleges", college.createCollege)
-//router.post("/functionup/interns", intern.createIntern)
+router.post("/functionup/colleges", collegeController.createCollege)
+router.post("/functionup/interns", internController.createIntern)
 
 //---------------------- Get College Details ---------------------------------------------------
 
