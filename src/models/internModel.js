@@ -23,7 +23,7 @@ const internSchema = new mongoose.Schema ({
         }
     }, 
     mobile: {           // validation required
-        type: Number,
+        type: String,
         unique: true,
         require: true,
         trim: true, 
@@ -34,6 +34,6 @@ const internSchema = new mongoose.Schema ({
     }
    
     
-}, {timestamps : true});
+});
 
 module.exports = mongoose.model ('internDb', internSchema)
