@@ -65,4 +65,5 @@ const createIntern = async function (req, res) {
 
     }
 }
+
 module.exports.createIntern = createIntern

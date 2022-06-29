@@ -8,29 +8,21 @@ const internSchema = new mongoose.Schema ({
     },
     name: {
         type: String, 
-        require: true,
-        trim: true,
+        require: true
     }, 
     email: {            
         type: String,
         require: true,
-        unique: true,
-        trim: true,
-        validate : {
-            validator: function(email){
-               return (/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email))
-            }
-        }
+        unique: true
     }, 
-    mobile: {           // validation required
+    mobile: {      
         type: String,
         unique: true,
-        require: true,
-        trim: true, 
+        require: true
     },
     collegeId:{
         type: objectId,
-        ref: "collegeDB",
+        ref: "collegeDB"
     }
    
     
