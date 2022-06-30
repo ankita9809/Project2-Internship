@@ -24,7 +24,7 @@ const createCollege = async function (req, res) {
 
 
             const data = req.body
-            data.name = data.name.trim()
+            // data.name = data.name.trim()
 
             if (Object.keys(data).length == 0) {
                 return res.status(400).send({ status: false, msg: "Please Provide Data" })
@@ -32,7 +32,7 @@ const createCollege = async function (req, res) {
             if (!data.name) {
                 return res.status(400).send({ status: false, msg: "Please Provide Name" })
             }
-
+            data.name = data.name.trim()
             const duplicateName = await collegeModel.findOne({ name: data.name });
             if (duplicateName) {
                 return res.status(400).send({ status: false, msg: "Name Already Exists..!" });
