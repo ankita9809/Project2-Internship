@@ -37,9 +37,9 @@ const createIntern = async function (req, res) {
                 return res.status(400).send({ status: false, msg: "Please Provide Name" })
             }
 
-            if (!objectValue(internData.name)) {
-                return res.status(400).send({ status: false, msg: "Please Provide valid Name" })
-            }
+            // if (!objectValue(internData.name)) {
+            //     return res.status(400).send({ status: false, msg: "Please Provide valid Name" })
+            // }
             if (!internData.name.match(nameRegex)) {
                 return res.status(400).send({ status: false, msg: "Please Provide correct input for name" })
             }

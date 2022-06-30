@@ -3,9 +3,10 @@ const internModel = require("../models/internModel")
 const axios = require("axios")
 
 
-//--------------------------- Regex for name ----------------- 
+//--------------------------- Regex for College Name ----------------- 
 
-const nameRegex = /^[a-zA-Z]{1,20}$/
+//const nameRegex = /^[ a-zA-Z ]{1,20}$/
+const nameRegex = /^[ a-z ]+$/i
 
 
 //-------------------------- Validation ------------------------
@@ -30,7 +31,7 @@ const createCollege = async function (req, res) {
             if (Object.keys(data).length == 0) {
                 return res.status(400).send({ status: false, msg: "Please Provide Data" })
             }
-            if (!data.name) {       //|| data.name.trim().length == 0
+            if (!data.name) {
                 return res.status(400).send({ status: false, msg: "Please Provide Name" })
             }
 
@@ -38,8 +39,7 @@ const createCollege = async function (req, res) {
             if (duplicateName) {
                 return res.status(400).send({ status: false, msg: "Name Already Exists..!" });
             }
-            // data.name = data.name.trim()
-            if (!nameRegex.test(data.name)) {
+            if (!data.name.match(nameRegex)) {
                 return res.status(400).send({ status: false, msg: "Please Provide correct input for name" })
             }
             if (!data.fullName) {
@@ -51,9 +51,9 @@ const createCollege = async function (req, res) {
 
             let found = false
             await axios.get(data.logoLink)
-                .then((r) => {
-                    if (r.status == 200 || r.status == 201) {
-                        if (r.headers["content-type"].startsWith("image/"))
+                .then((res) => {
+                    if (res.status == 200 || res.status == 201) {
+                        if (res.headers["content-type"].startsWith("image/"))
                             found = true;
                     }
                 })
@@ -101,7 +101,7 @@ const getCollegeDetails = async function (req, res) {
 
         const interns = await internModel.find({ collegeId: allData._id, isDeleted: false }, { name: 1, email: 1, mobile: 1 })
         if (!interns)
-            return res.status(400).send({ status: false, msg: "interns not found or already deleted" })
+            return res.status(404).send({ status: false, msg: "interns not found or already deleted" })
 
         res.status(200).send({
             status: true,
