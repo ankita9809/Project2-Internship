@@ -3,9 +3,10 @@ const internModel = require("../models/internModel")
 const axios = require("axios")
 
 
-//--------------------------- Regex for logo ----------------- 
+//--------------------------- Regex for name ----------------- 
 
 const nameRegex = /^[a-zA-Z]{1,20}$/
+
 
 //-------------------------- Validation ------------------------
 // const objectValue = function (value) {
@@ -20,63 +21,64 @@ const nameRegex = /^[a-zA-Z]{1,20}$/
 const createCollege = async function (req, res) {
     try {
 
-        const paramsData = req.query         //Error 
-        if (paramsData) {
-            return res.status(400).send({ status: false, msg: "Invalid Request, you can't provide data in query params." })
-        }
+        if (Object.keys(req.query).length == 0) {
 
-        const data = req.body
-        data.name = data.name.trim()
 
-        if (Object.keys(data).length == 0) {
-            return res.status(400).send({ status: false, msg: "Please Provide Data" })
-        }
-        if (!data.name) {       //|| data.name.trim().length == 0
-            return res.status(400).send({ status: false, msg: "Please Provide Name" })
-        }
+            const data = req.body
+            data.name = data.name.trim()
 
-        const duplicateName = await collegeModel.findOne({ name: data.name });
-        if (duplicateName) {
-            return res.status(400).send({ status: false, msg: "Name Already Exists..!" });
-        }
-        // data.name = data.name.trim()
-        if (!nameRegex.test(data.name)) {
-            return res.status(400).send({ status: false, msg: "Please Provide correct input for name" })
-        }
-        if (!data.fullName) {
-            return res.status(400).send({ status: false, msg: "Please Provide fullName" })
-        }
-        if (!data.logoLink) {
-            return res.status(400).send({ status: false, msg: "Please Provide logoLink" })
-        }
-        
-        let found = false
-        await axios.get(data.logoLink)
-            .then((r) => {
-                if (r.status == 200 || r.status == 201) {
-                    if (r.headers["content-type"].startsWith("image/"))
-                        found = true;
+            if (Object.keys(data).length == 0) {
+                return res.status(400).send({ status: false, msg: "Please Provide Data" })
+            }
+            if (!data.name) {       //|| data.name.trim().length == 0
+                return res.status(400).send({ status: false, msg: "Please Provide Name" })
+            }
+
+            const duplicateName = await collegeModel.findOne({ name: data.name });
+            if (duplicateName) {
+                return res.status(400).send({ status: false, msg: "Name Already Exists..!" });
+            }
+            // data.name = data.name.trim()
+            if (!nameRegex.test(data.name)) {
+                return res.status(400).send({ status: false, msg: "Please Provide correct input for name" })
+            }
+            if (!data.fullName) {
+                return res.status(400).send({ status: false, msg: "Please Provide fullName" })
+            }
+            if (!data.logoLink) {
+                return res.status(400).send({ status: false, msg: "Please Provide logoLink" })
+            }
+
+            let found = false
+            await axios.get(data.logoLink)
+                .then((r) => {
+                    if (r.status == 200 || r.status == 201) {
+                        if (r.headers["content-type"].startsWith("image/"))
+                            found = true;
+                    }
+                })
+                .catch((error) => { found = false })
+
+            if (found == false) return res.status(400).send({ status: false, message: "Provide correct Logo Link" });
+
+
+            let duplicatelogoLink = await collegeModel.findOne({ logoLink: data.logoLink });
+            if (duplicatelogoLink) {
+                return res.status(400).send({ status: false, msg: `Logo Link already exists!` });
+            }
+            let savedData = await collegeModel.create(data)
+            return res.status(201).send({
+                status: true,
+                data: {
+                    name: savedData.name,
+                    fullName: savedData.fullName,
+                    logoLink: savedData.logoLink,
+                    isDeleted: savedData.isDeleted
                 }
             })
-            .catch((error) => { found = false })
-
-        if (found == false) return res.status(400).send({ status: false, message: "Provide correct Logo Link" });
-
-
-        let duplicatelogoLink = await collegeModel.findOne({ logoLink: data.logoLink });
-        if (duplicatelogoLink) {
-            return res.status(400).send({ status: false, msg: `Logo Link already exists!` });
+        } else {
+            return res.status(400).send({ status: false, msg: "Invalid Request, You cannot provide data in query Params" })
         }
-        let savedData = await collegeModel.create(data)
-        return res.status(201).send({
-            status: true,
-            data: {
-                name: savedData.name,
-                fullName: savedData.fullName,
-                logoLink: savedData.logoLink,
-                isDeleted: savedData.isDeleted
-            }
-        })
     }
     catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
