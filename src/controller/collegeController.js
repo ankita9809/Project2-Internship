@@ -1,40 +1,40 @@
 const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
+const axios = require("axios")
 
 
 //--------------------------- Regex for logo ----------------- 
 
-const logoRegex = /(ftp|http|https|):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
 const nameRegex = /^[a-zA-Z]{1,20}$/
 
 //-------------------------- Validation ------------------------
-const objectValue = function (value) {
-    if (typeof value === undefined || value === null ) return false    //|| typeof value === Number
-    if (typeof value === "string" && value.trim().length === 0) return false
-    if(typeof value === "Number") return false
-    return true
-}
+// const objectValue = function (value) {
+//     if (typeof value === undefined || value === null) return false    //|| typeof value === Number
+//     if (typeof value === "string" && value.trim().length === 0) return false
+//     if (typeof value === "Number") return false
+//     return true
+// }
 
 // ---------------------- CREATE COLLEGE ---------------------
 
 const createCollege = async function (req, res) {
     try {
-        
-        // const paramsData = req.params            //Error
-        // if(paramsData){
-        //     return res.status(400).send({ status: false, msg: "Invalid Request, you can't provide data in query params."})
-        // }
+
+        const paramsData = req.query         //Error 
+        if (paramsData) {
+            return res.status(400).send({ status: false, msg: "Invalid Request, you can't provide data in query params." })
+        }
 
         const data = req.body
         data.name = data.name.trim()
-       
+
         if (Object.keys(data).length == 0) {
             return res.status(400).send({ status: false, msg: "Please Provide Data" })
         }
         if (!data.name) {       //|| data.name.trim().length == 0
             return res.status(400).send({ status: false, msg: "Please Provide Name" })
         }
-        
+
         const duplicateName = await collegeModel.findOne({ name: data.name });
         if (duplicateName) {
             return res.status(400).send({ status: false, msg: "Name Already Exists..!" });
@@ -49,9 +49,20 @@ const createCollege = async function (req, res) {
         if (!data.logoLink) {
             return res.status(400).send({ status: false, msg: "Please Provide logoLink" })
         }
-        if (!logoRegex.test(data.logoLink)) {
-            return res.status(400).send({ status: false, msg: "Please Provide valid logoLink" })
-        }
+        
+        let found = false
+        await axios.get(data.logoLink)
+            .then((r) => {
+                if (r.status == 200 || r.status == 201) {
+                    if (r.headers["content-type"].startsWith("image/"))
+                        found = true;
+                }
+            })
+            .catch((error) => { found = false })
+
+        if (found == false) return res.status(400).send({ status: false, message: "Provide correct Logo Link" });
+
+
         let duplicatelogoLink = await collegeModel.findOne({ logoLink: data.logoLink });
         if (duplicatelogoLink) {
             return res.status(400).send({ status: false, msg: `Logo Link already exists!` });
