@@ -7,7 +7,7 @@ const collegeModel = require("../models/collegeModel")
 const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
 const mobileRegex = /^[6-9]\d{9}$/
 // const nameRegex = /^[a-zA-Z]{1,20}$/
-const nameRegex = /\d/
+const nameRegex = /^[ a-z ]+$/i
 
 
 // ---------------------------- Validation -------------------------------------
@@ -40,7 +40,7 @@ const createIntern = async function (req, res) {
             if (!objectValue(internData.name)) {
                 return res.status(400).send({ status: false, msg: "Please Provide valid Name" })
             }
-            if (nameRegex.test(internData.name)) {
+            if (!internData.name.match(nameRegex)) {
                 return res.status(400).send({ status: false, msg: "Please Provide correct input for name" })
             }
             if (!internData.email) {
