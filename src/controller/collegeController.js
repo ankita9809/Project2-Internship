@@ -7,8 +7,6 @@ const axios = require("axios")
 
 const nameRegex = /^[ a-z ]+$/i
 
-
-
 // ---------------------- CREATE COLLEGE ----------------------------
 
 const createCollege = async function (req, res) {
@@ -110,8 +108,6 @@ const getCollegeDetails = async function (req, res) {
 
     }
 }
-
-
 
 
 module.exports.createCollege = createCollege

@@ -8,15 +8,6 @@ const mobileRegex = /^[6-9]\d{9}$/
 const nameRegex = /^[ a-z ]+$/i
 
 
-// ---------------------------- Validation -------------------------------------
-
-// const objectValue = function (value) {
-//     if (typeof value === undefined || value === null) return false    //|| typeof value === Number
-//     if (typeof value === "string" && value.trim().length === 0) return false
-//     if (typeof value === Number) return false
-//     return true
-// }
-
 // -------------------------- CREATE Intern -----------------------------
 
 const createIntern = async function (req, res) {
@@ -25,8 +16,6 @@ const createIntern = async function (req, res) {
             const internData = req.body
             
             const { name, email, mobile, collegeName } = internData
-            //console.log(internData)
-
 
             if (Object.keys(internData).length == 0) {
                 return res.status(400).send({ status: false, msg: "Please Provide Data" })
@@ -35,12 +24,9 @@ const createIntern = async function (req, res) {
             if (!internData.name) {
                 return res.status(400).send({ status: false, msg: "Please Provide Name" })
             }
-            //const trim = internData.name = internData.name.trim()
+            
             internData.name = internData.name.trim()
-
-            // if (!objectValue(internData.name)) {
-            //     return res.status(400).send({ status: false, msg: "Please Provide valid Name" })
-            // }
+           
             if (!internData.name.match(nameRegex)) {
                 return res.status(400).send({ status: false, msg: "Please Provide correct input for name" })
             }
