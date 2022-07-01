@@ -9,16 +9,9 @@ const mobileRegex = /^[6-9]\d{9}$/
 // const nameRegex = /^[a-zA-Z]{1,20}$/
 const nameRegex = /^[ a-z ]+$/i
 
-// ---------------------------- Validation -------------------------------------
 
-// ---------------------------- Validation -------------------------------------
 
-const objectValue = function (value) {
-    if (typeof value === undefined || value === null) return false    //|| typeof value === Number
-    if (typeof value === "string" && value.trim().length === 0) return false
-    if (typeof value === Number) return false
-    return true
-}
+
 
 // -------------------------- CREATE Intern -----------------------------
 
@@ -27,7 +20,7 @@ const createIntern = async function (req, res) {
         if (Object.keys(req.query).length == 0) {
             const internData = req.body
             internData.name = internData.name.trim()
-            const { name, email, mobile, collegeName } = internData
+            const { name, email, mobile, collegeName } = internData //destructuring
             //console.log(internData)
 
             if (Object.keys(internData).length == 0) {
