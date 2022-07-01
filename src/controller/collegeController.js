@@ -7,14 +7,6 @@ const axios = require("axios")
 
 const nameRegex = /^[ a-z ]+$/i
 
-//-------------------------- Validation -----------------------------------------------
-// const objectValue = function (value) {
-//     if (typeof value === undefined || value === null) return false    //|| typeof value === Number
-//     if (typeof value === "string" && value.trim().length === 0) return false
-//     if (typeof value === "Number") return false
-//     return true
-// }
-
 // ---------------------- CREATE COLLEGE ----------------------------
 
 const createCollege = async function (req, res) {
@@ -24,8 +16,7 @@ const createCollege = async function (req, res) {
 
 
             const data = req.body
-            // data.name = data.name.trim()
-
+           
             if (Object.keys(data).length == 0) {
                 return res.status(400).send({ status: false, msg: "Please Provide Data" })
             }
@@ -92,8 +83,8 @@ const getCollegeDetails = async function (req, res) {
         const collegeName = req.query.collegeName
         if (!collegeName)
             return res.status(400).send({ status: false, msg: "college name is required" })
-
-        const allData = await collegeModel.findOne({ name: collegeName }).select({ name: 1, fullName: 1, logoLink: 1 })
+   
+        const allData = await collegeModel.findOne({ name: collegeName.toLowerCase() }).select({ name: 1, fullName: 1, logoLink: 1 })
         if (!allData)
             return res.status(404).send({ status: false, msg: "college does not exist" })
 
@@ -117,8 +108,6 @@ const getCollegeDetails = async function (req, res) {
 
     }
 }
-
-
 
 
 module.exports.createCollege = createCollege
