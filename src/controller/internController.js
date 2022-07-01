@@ -23,17 +23,20 @@ const createIntern = async function (req, res) {
     try {
         if (Object.keys(req.query).length == 0) {
             const internData = req.body
-            internData.name = internData.name.trim()
+            
             const { name, email, mobile, collegeName } = internData
             //console.log(internData)
+
 
             if (Object.keys(internData).length == 0) {
                 return res.status(400).send({ status: false, msg: "Please Provide Data" })
             }
-
+            
             if (!internData.name) {
                 return res.status(400).send({ status: false, msg: "Please Provide Name" })
             }
+            //const trim = internData.name = internData.name.trim()
+            internData.name = internData.name.trim()
 
             // if (!objectValue(internData.name)) {
             //     return res.status(400).send({ status: false, msg: "Please Provide valid Name" })
