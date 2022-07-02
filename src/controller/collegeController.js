@@ -84,16 +84,18 @@ const getCollegeDetails = async function (req, res) {
         if (!collegeName)
             return res.status(400).send({ status: false, msg: "college name is required" })
    
-        const allData = await collegeModel.findOne({ name: collegeName.toLowerCase() }).select({ name: 1, fullName: 1, logoLink: 1 })
+        const allData = await collegeModel.findOne({ name: collegeName.toLowerCase(), isDeleted: false }).select({ name: 1, fullName: 1, logoLink: 1 })
         if (!allData)
             return res.status(404).send({ status: false, msg: "college does not exist" })
 
-        const interns = await internModel.find({ collegeId: allData._id, isDeleted: false }, { name: 1, email: 1, mobile: 1 })
-        if (!interns)
+        const interns = await internModel.find({ collegeId: allData._id, isDeleted: false }).select({ name: 1, email: 1, mobile: 1})
+   
+        if (Object.keys(interns).length == 0) {
+        
             return res.status(404).send({ status: false, msg: "Interns not found or already deleted" })
-
+        }
         res.status(200).send({
-            status: true,
+            status: true, 
             data: {
                 name: allData.name,
                 fullName: allData.fullName,
