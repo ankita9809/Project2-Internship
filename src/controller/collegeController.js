@@ -9,7 +9,7 @@ const nameRegex = /^[ a-z ]+$/i
 
 // ---------------------- CREATE COLLEGE ----------------------------
 
-const createCollege = async function (req, res) {
+const createCollege = async function (req, res) { 
     try {
 
         if (Object.keys(req.query).length == 0) {

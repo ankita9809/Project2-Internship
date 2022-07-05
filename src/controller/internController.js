@@ -10,7 +10,7 @@ const nameRegex = /^[ a-z ]+$/i
 
 // -------------------------- CREATE Intern -----------------------------
 
-const createIntern = async function (req, res) {
+const createIntern = async function (req, res) { 
     try {
         if (Object.keys(req.query).length == 0) {
             const internData = req.body

@@ -3,7 +3,7 @@
 Open to Intern Project Requirement
 
 Key points
-
+ 
 1. Create a group database groupXDatabase. 
 2. You can clean the db you previously used and resue that.
 3. This time each group should have a single git branch. Coordinate amongst yourselves by ensuring every next person pulls the code last pushed by a team mate. You branch will be checked as part of the demo. Branch name should follow the naming convention project/internshipGroupX
