@@ -8,7 +8,7 @@ const collegeSchema = new mongoose.Schema ({
         },  
     fullName: {
         type: String,
-        require: true,
+        require: true, 
     }, 
     logoLink: {
         type: String,
