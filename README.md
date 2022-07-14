@@ -1,76 +1,84 @@
-# internCollege
+# Radon
 
-Open to Intern Project Requirement
+## Open to Intern Project Requirement
 
-Key points
- 
-1. Create a group database groupXDatabase. 
-2. You can clean the db you previously used and resue that.
-3. This time each group should have a single git branch. Coordinate amongst yourselves by ensuring every next person pulls the code last pushed by a team mate. You branch will be checked as part of the demo. Branch name should follow the naming convention project/internshipGroupX
-4. Follow the naming conventions exactly as instructed. The backend code will be integrated with the front-end application which means any mismatch in the expected request body will lead to failure in successful integration.
+### Key points
+- Create a group database `groupXDatabase`. You can clean the db you previously used and resue that.
+- This time each group should have a *single git branch*. Coordinate amongst yourselves by ensuring every next person pulls the code last pushed by a team mate. You branch will be checked as part of the demo. Branch name should follow the naming convention `project/internshipGroupX`
+- Follow the naming conventions exactly as instructed. The backend code will be integrated with the front-end application which means any mismatch in the expected request body will lead to failure in successful integration.
 
------------------------------------- Models -------------------------------------------------------------------
-
-1. College Model
+### Models
+- College Model
+```
 { name: { mandatory, unique, example iith}, fullName: {mandatory, example `Indian Institute of Technology, Hyderabad`}, logoLink: {mandatory}, isDeleted: {boolean, default: false} }
-
-2. Intern Model
+```
+- Intern Model
+```
 { name: {mandatory}, email: {mandatory, valid email, unique}, mobile: {mandatory, valid mobile number, unique}, collegeId: {ObjectId, ref to college model, isDeleted: {boolean, default: false}}
+```
 
------------------------------------ POST /functionup/colleges -------------------------------------------------
+### POST /functionup/colleges
+- Create a college - a document for each member of the group
+- The logo link will be provided to you by the mentors. This link is a s3 (Amazon's Simple Service) url. Try accessing the link to see if the link is public or not.
 
-1. Create a college - a document for each member of the group
+  `Endpoint: BASE_URL/functionup/colleges`
 
-2. The logo link will be provided to you by the mentors. This link is a s3 (Amazon's Simple Service) url. Try accessing the link to see if the link is public or not.
+### POST /functionup/interns
+- Create a document for an intern. 
+- Also save the collegeId along with the document. Your request body contains the following fields - { name, mobile, email, collegeName}
+- Return HTTP status 201 on a succesful document creation. Also return the document. The response should be a JSON object like [this](#successful-response-structure) 
 
-3. Endpoint: BASE_URL/functionup/colleges
+- Return HTTP status 400 for an invalid request with a response body like [this](#error-response-structure)
 
------------------------------------- POST /functionup/interns -------------------------------------------------
-1. Create a document for an intern.
+### GET /functionup/collegeDetails
+- Returns the college details for the requested college (Expect a query parameter by the name `collegeName`. This is anabbreviated college name. For example `iith`)
+- Returns the list of all interns who have applied for internship at this college.
+- The response structure should look like [this](#college-details)
 
-2. Also save the collegeId along with the document. Your request body contains the following fields - { name, mobile, email, collegeName}
 
-3. Return HTTP status 201 on a succesful document creation. Also return the document. The response should be a JSON object like this
+## Testing 
+- To test these apis create a new collection in Postman named Project 2 Internship
+- Each api should have a new request in this collection
+- Each request in the collection should be rightly named. Eg Create college, Get college details etc
+- Each member of each team should have their tests in running state
 
-4. Return HTTP status 400 for an invalid request with a response body like this
 
------------------------------------ GET /functionup/collegeDetails ----------------------------------------------
+Refer below sample
 
-1. Returns the college details for the requested college (Expect a query parameter by the name collegeName. This is anabbreviated college name. For example iith)
-2. Returns the list of all interns who have applied for internship at this college.
-3. The response structure should look like this
+ ![A Postman collection and request sample](assets/Postman-collection-sample.png)
 
------------------------------------ Testing ----------------------------------------------------------------------
-1. To test these apis create a new collection in Postman named Project 2 Internship
-2. Each api should have a new request in this collection
-3. Each request in the collection should be rightly named. Eg Create college, Get college details etc
-4. Each member of each team should have their tests in running state
-5. Refer below sample
+## Response
 
----------------------------- A Postman collection and request sample ----------------------------------------------
-
-Response
-Successful Response structure
+### Successful Response structure
+```yaml
 {
   status: true,
   data: {
 
   }
 }
-Error Response structure
+```
+### Error Response structure
+```yaml
 {
   status: false,
   message: ""
 }
-Collections samples
-College
+```
+
+## Collections samples
+
+#### College
+```yaml
 {
     "name" : "iith",
     "fullName" : "Indian Institute of Technology, Hyderabad",
     "logoLink" : "https://functionup.s3.ap-south-1.amazonaws.com/colleges/iith.png",
     "isDeleted" : false
 }
-Intern
+```
+#### Intern
+```yaml
    {
     "isDeleted" : false,
     "name" : "Jane Does",
@@ -78,8 +86,11 @@ Intern
     "mobile" : "90000900000",
     "collegeId" : ObjectId("888771129c9ea621dc7f5e3b")
 }
-Response samples
-College details
+```
+## Response samples
+
+### College details
+```yaml
 {
   "data": {
     "name": "xyz",
@@ -113,3 +124,4 @@ College details
     ]
   }
 }
+```
